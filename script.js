@@ -1,20 +1,3 @@
-const app = document.querySelector('.weather-app');
-const temp = document.querySelector('.temp');
-const dateOutput = document.querySelector(.'date');
-const timeOutput = document.querySelector(.'time');
-const conditionOutput = document.querySelector('.condition');
-const nameOutput = querySelector('.name');
-const icon = querySelector('.icon');
-const cloudOutput = querySelector('.cloud');
-const humidityOutput = querySelector('.humidity');
-const windOutput = querySelector('.wind');
-const form = document.getElementById('locationInput');
-const search = document.querySelector('.search');
-const btn = document.querySelector('.submit');
-const cities = document.querySelectorAll('.city');
-
-let cityInput = "Jakarta";
-
 function dateFormatted(date) {
     const options = {
         weekday: "long",
@@ -26,7 +9,7 @@ function dateFormatted(date) {
     return dateFormatted.toLocaleDateString("id-ID", options);
 }
 
-const dailyTemp = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,cloud_cover,wind_speed_10m"
+const dailyTemp = "https://api.open-meteo.com/v1/forecast?latitude=-6.1818&longitude=106.8223&daily=weather_code,temperature_2m_max,temperature_2m_min"
 const precipitation_sum = ""
 
 async function getWeather() {
