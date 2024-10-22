@@ -1,0 +1,47 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    background-image: url('background.jpg');
+    background-size: cover;
+}
+
+h1, h5 {
+    color: rgba(255, 255, 255, 0.719);
+    justify-content: end;
+}
+
+.container {
+    /* background-color: brown; */
+    max-width: 90%;
+    height: 100%;
+}
+
+.navbar {
+    /* background-color: blue; */
+    justify-content: ;
+}
+
+.search-bar {
+    /* background-color: aquamarine; */
+
+}
+
+.all-card {
+    /* background-color: blueviolet; */
+    
+}
+
+.card-body {
+    background-color: rgba(0, 0, 0, 0.919);
+    color: rgba(255, 255, 255, 0.719);
+}
+
+footer {
+    background: #3d3d3d80;
+    margin-top: -20px;
+    color: rgba(255, 255, 255, 0.719);
+    text-align: center;
+    padding: 7px 0px;
+}

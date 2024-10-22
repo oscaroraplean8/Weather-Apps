@@ -6,32 +6,68 @@ function dateFormatted(date) {
         day: "numeric",
     };
     const dateFormatted = new Date(date);
-    return dateFormatted.toLocaleDateString("id-ID", options);
+    return dateFormatted.toLocaleDateString("en-US", options);
 }
 
-const dailyTemp = "https://api.open-meteo.com/v1/forecast?latitude=-6.1818&longitude=106.8223&daily=weather_code,temperature_2m_max,temperature_2m_min"
-const precipitation_sum = ""
+async function getWeatherByCity() {
+    const city = document.getElementById("city").value;
+    document.getElementById("fetch-loading").style.display = "block";
+    const response = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=en&format=json`
+    );
+    const responseJson = await response.json();
+    const latitude = responseJson.results[0].latitude;
+    const longitude = responseJson.results[0].longitude;
+    const cityName = responseJson.results[0].name;
+    getWeather(latitude, longitude);
+    document.getElementById("city-name").innerHTML = cityName;
+    document.getElementById("city").value = "";
+    document.getElementById("fetch-loading").style.display = "none";
+}
 
-async function getWeather() {
-    try {
-        const response = await fetch(dailyTemp);
-        const data = await response.json();
-        data.daily.time.forEach((el, i) => {
-            document.getElementById("days").innerHTML += `
-            <div class="col-12 col-md-3">
-                <div class="card text-bg-light mb-3">
+async function getWeather(latitude, longitude) {
+    document.getElementById("fetch-loading").style.display = "block";
+    const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min`
+    );
+    const responseJson = await response.json();
+    document.getElementById("days").innerHTML = "";
+    for (let i = 0; i < responseJson.daily.time.length; i++) {
+        document.getElementById("days").innerHTML += `
+            <div class="col-12 col-md-2">
+                <div class="card text-bg-light mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">${dateFormatted(el)}</h5>
-                        <p class="card-text">
-                            ${data.daily.temperature_2m_max[i]} C
+                        <img class="card-img-top" style="width: 100px; height: 100px; justify-self: center; margin-left: auto; margin-right: auto; display: flex;" src="${
+                            wmo[responseJson.daily.weather_code[i]].day.image
+                        }" alt="${
+            wmo[responseJson.daily.weather_code[i]].day.description
+        }" class="card-img-top">
+                        <h5 class="card-title">${dateFormatted(
+                            responseJson.daily.time[i]
+                        )}</h5>
+                        <p class="card-text"> Min Temp      
+                            ${responseJson.daily.temperature_2m_min[i]} C
+                        </p>
+                        <p class="card-text"> Max Temp
+                            ${responseJson.daily.temperature_2m_max[i]} C
                         </p>
                     </div>
                 </div>
             </div>
-        `
-        })
-    } catch (error) {
-        console.log(error);
+        `;
+    }
+    document.getElementById("fetch-loading").style.display = "none";
+}
+
+function showPosition(position) {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    getWeather(latitude, longitude);
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
     }
 }
-getWeather();
+getLocation();
